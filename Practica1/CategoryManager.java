@@ -2,20 +2,41 @@ import java.util.LinkedList;
 import java.util.Scanner;
 import java.util.InputMismatchException;
 
-
+/**
+*Clase Category
+*Modela una Categoría a traves de los
+*parámetros  dados, category_id y category; id de la categoría y nombre de las categorías
+*respectivamente
+*/
 class Category{
 		private Integer category_id;
 		private String category;
 
+		/**
+		*Constructor de la clase Category
+		*
+		*@params
+		* int category_id : ID de la categoría
+		*	String category : nombre de la categoría
+		*/
 		Category(int category_id, String category){
 			this.category_id=category_id;
 			this.category=category;
 		}
 
+		/**
+		*Devuelve el Id de la categoría
+		*@returns
+		 *category_id
+		*/
 		public Integer getCategory_id(){
 			return this.category_id;
 		}
-
+		/*
+		*Devuelve el nombre de la categoría
+		*@returns
+		*category
+		*/
 		public String getCategory(){
 			return this.category;
 		}
@@ -27,8 +48,11 @@ class Category{
 }
 
 public class CategoryManager{
-
-
+	/**
+	*Clase CategoryManager, su objetivo es manejar a la clase categoría
+	*
+	*
+	*/
 	private static LinkedList<Category> categories_list= new LinkedList<>();
 
 	public static void main(String[] args){
@@ -54,6 +78,22 @@ public class CategoryManager{
 			String category=sc.next();
 			createCategory(categoryId, category);
 			break;
+		case 2:
+			getCategories();
+			break;
+		case 3:
+			System.out.println("Ingresa ID de la categoría");
+			Integer categoryID=sc.nextInt();
+			getCategory(categoryID);
+			break;
+		case 4:
+			System.out.println("Ingrese ID de la categoría que desea que sea eliminada");
+			Integer catID=sc.nextInt();
+			deleteCategory(catID);
+			break;
+		default:
+			System.out.println("SELECCIONE ALGUNA DE LAS OPCIONES DISPONIBLES");
+			break;
 		}
 	}catch(InputMismatchException ime){
 		System.out.println("Debe insertar un número entre 1 y 4");
@@ -63,17 +103,37 @@ public class CategoryManager{
 	}
 }
 
+	/**
+	*El método crea una categoría y la añade a la lista de categorías
+	*@params
+	*category_id : Id de las categoría
+	*category : Nombre de la categoría
+	*/
 	public static void createCategory(Integer category_id, String category){
+		if(getObject(category_id)!=null){
+			System.out.println("Ya existe una categoría con el id registrado");
+			return;
+		}
 		Category c=new Category(category_id, category);
 		categories_list.add(c);
 		System.out.println(c.toString());
 	}
 
+	/**
+	*Devuelve un String con la lista de
+	*
+	*/
 	public void getCategories(){
-	for(Category cat: categories_list)
-		System.out.println(cat.toString());
+		String cats="";
+		for(Category cat: categories_list)
+				cats+=cat.toString()+"\n";
+		System.out.println(cats);
 	}
 
+	/**
+	*Devuelve la categoría correspondiente al ID
+	*
+	*/
 	public void getCategory(Integer category_id){
 	for(Category cat: categories_list){
 		if(cat.getCategory_id()==category_id){
