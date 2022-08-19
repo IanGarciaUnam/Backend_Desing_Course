@@ -2,59 +2,23 @@ import java.util.LinkedList;
 import java.util.Scanner;
 import java.util.InputMismatchException;
 
-/**
-*Clase Category
-*Modela una Categoría a traves de los
-*parámetros  dados, category_id y category; id de la categoría y nombre de las categorías
-*respectivamente
-*/
-class Category{
-		private Integer category_id;
-		private String category;
 
-		/**
-		*Constructor de la clase Category
-		*
-		*@params
-		* int category_id : ID de la categoría
-		*	String category : nombre de la categoría
-		*/
-		Category(int category_id, String category){
-			this.category_id=category_id;
-			this.category=category;
-		}
-
-		/**
-		*Devuelve el Id de la categoría
-		*@returns
-		 *category_id
-		*/
-		public Integer getCategory_id(){
-			return this.category_id;
-		}
-		/*
-		*Devuelve el nombre de la categoría
-		*@returns
-		*category
-		*/
-		public String getCategory(){
-			return this.category;
-		}
-
-		@Override
-		public String toString(){
-			return "Category_id: "+category_id.toString()+" Category: "+ category;
-	}
-}
 
 public class CategoryManager{
+
+	/**
+	*Clase Category
+	*Modela una Categoría a traves de los
+	*parámetros  dados, category_id y category; id de la categoría y nombre de las categorías
+	*respectivamente
+	*/
+
+
 	/**
 	*Clase CategoryManager, su objetivo es manejar a la clase categoría
 	*
 	*
 	*/
-	private static LinkedList<Category> categories_list= new LinkedList<>();
-
 	public static void main(String[] args){
 
 	Scanner sc=new Scanner(System.in);
@@ -84,7 +48,7 @@ public class CategoryManager{
 		case 3:
 			System.out.println("Ingresa ID de la categoría");
 			Integer categoryID=sc.nextInt();
-			getCategory(categoryID);
+			System.out.println(getObject(categoryID));
 			break;
 		case 4:
 			System.out.println("Ingrese ID de la categoría que desea que sea eliminada");
@@ -109,21 +73,29 @@ public class CategoryManager{
 	*category_id : Id de las categoría
 	*category : Nombre de la categoría
 	*/
+
+	static LinkedList<CategoryManager.Category> categories_list= new LinkedList<>();
 	public static void createCategory(Integer category_id, String category){
-		if(getObject(category_id)!=null){
-			System.out.println("Ya existe una categoría con el id registrado");
-			return;
-		}
+		//System.out.println(getObject(category_id).toString());
+		//CategoryManager cm= new CategoryManager();
 		Category c=new Category(category_id, category);
-		categories_list.add(c);
-		System.out.println(c.toString());
+
+		System.out.println(categories_list.contains(c));
+		if(categories_list.contains(c)){
+				System.out.println(c.toString() +" Esta previamente registrado");
+				return;
+			}else{
+				categories_list.add(c);//revisar
+				System.out.println(c.toString());
+			}
+
 	}
 
 	/**
 	*Devuelve un String con la lista de
 	*
 	*/
-	public void getCategories(){
+	public static void getCategories(){
 		String cats="";
 		for(Category cat: categories_list)
 				cats+=cat.toString()+"\n";
@@ -132,9 +104,9 @@ public class CategoryManager{
 
 	/**
 	*Devuelve la categoría correspondiente al ID
-	*
+	*imprimiendola en pantalla
 	*/
-	public void getCategory(Integer category_id){
+	public static void getCategory(Integer category_id){
 	for(Category cat: categories_list){
 		if(cat.getCategory_id()==category_id){
 			System.out.println(cat.toString());
@@ -143,18 +115,25 @@ public class CategoryManager{
 	System.out.printf("No se encontró el objeto con Category_id: %d",category_id);
 
 	}
-	private Category getObject(Integer category_id){
-		for(Category cat: categories_list)
-			if(cat.getCategory_id()==category_id)
-				return cat;
-		return null;
-	}
 
-	public void deleteCategory(Integer category_id){
-		Category cat=getObject(category_id);
+	private static String getObject(Integer category_id){
+		for(Category cat: categories_list){
+			System.out.println(cat.toString());
+			//if(cat.getCategory_id()==category_id)
+				//return cat;
+		}
+		return categories_list;
+	}
+	/**
+	*Borra una categoría indicada por el ID
+	*
+	*/
+	public static void deleteCategory(Integer category_id){
+		String cat=getObject(category_id);
 		if(cat!=null){
 			categories_list.remove(cat);
 		}
+
 	}
 
 
