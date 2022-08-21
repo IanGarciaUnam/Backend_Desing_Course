@@ -1,7 +1,7 @@
 import java.util.LinkedList;
 import java.util.Scanner;
 import java.util.InputMismatchException;
-
+import java.util.Collection;
 
 
 public class CategoryManager{
@@ -19,18 +19,20 @@ public class CategoryManager{
 	*
 	*
 	*/
+
+	private static LinkedList<Category> categories_list= new LinkedList<>();
+
 	public static void main(String[] args){
 
 	Scanner sc=new Scanner(System.in);
 	while(true){
-		//System.out.print("\033[H\033[2J");
-   	//System.out.flush();
 		System.out.println("=================Práctica 1=====================");
 		System.out.println("Crea una categoría y agregala a la lista ... [1]");
 		System.out.println("Muestra todas las categorías registradas ... [2]");
 		System.out.println("Busca una categoría por su id................[3]");
 		System.out.println("Elimina una categoría por su id..............[4]");
-
+		System.out.println("Salir........................................[0]");
+		System.out.println("Limpiar pantalla.............................[5]");
 		try{
 		int opt =sc.nextInt();
 
@@ -48,12 +50,19 @@ public class CategoryManager{
 		case 3:
 			System.out.println("Ingresa ID de la categoría");
 			Integer categoryID=sc.nextInt();
-			System.out.println(getObject(categoryID));
+			getCategory(categoryID);
 			break;
 		case 4:
 			System.out.println("Ingrese ID de la categoría que desea que sea eliminada");
 			Integer catID=sc.nextInt();
 			deleteCategory(catID);
+			break;
+		case 0:
+			System.out.println("Saliendo");
+			return;
+		case 5:
+			System.out.print("\033[H\033[2J");
+			System.out.flush();
 			break;
 		default:
 			System.out.println("SELECCIONE ALGUNA DE LAS OPCIONES DISPONIBLES");
@@ -73,16 +82,12 @@ public class CategoryManager{
 	*category_id : Id de las categoría
 	*category : Nombre de la categoría
 	*/
-
-	static LinkedList<CategoryManager.Category> categories_list= new LinkedList<>();
 	public static void createCategory(Integer category_id, String category){
 		//System.out.println(getObject(category_id).toString());
 		//CategoryManager cm= new CategoryManager();
 		Category c=new Category(category_id, category);
-
-		System.out.println(categories_list.contains(c));
 		if(categories_list.contains(c)){
-				System.out.println(c.toString() +" Esta previamente registrado");
+				System.out.printf("Una categoría con el id %d ya se encuentra previamente registrada",c.getCategory_id());
 				return;
 			}else{
 				categories_list.add(c);//revisar
@@ -96,6 +101,10 @@ public class CategoryManager{
 	*
 	*/
 	public static void getCategories(){
+		if(categories_list.isEmpty()){
+			System.out.println("No existen categorías registradas");
+			return;
+		}
 		String cats="";
 		for(Category cat: categories_list)
 				cats+=cat.toString()+"\n";
@@ -107,33 +116,34 @@ public class CategoryManager{
 	*imprimiendola en pantalla
 	*/
 	public static void getCategory(Integer category_id){
-	for(Category cat: categories_list){
-		if(cat.getCategory_id()==category_id){
-			System.out.println(cat.toString());
+		Category fakeCategory=new Category(category_id);
+		if(!categories_list.contains(fakeCategory)){
+			System.out.println("No existe una categoría con el id ingresado");
+			return;
 		}
-	}
-	System.out.printf("No se encontró el objeto con Category_id: %d",category_id);
-
+		System.out.println(isMyObjectThere(fakeCategory, categories_list));
 	}
 
-	private static String getObject(Integer category_id){
-		for(Category cat: categories_list){
-			System.out.println(cat.toString());
-			//if(cat.getCategory_id()==category_id)
-				//return cat;
+	private static <T> T isMyObjectThere(T t2, Collection<T> list){
+		if(!list.contains(t2)) return null;
+		for(T t : list){
+			if(t2.equals(t))
+				return t;
 		}
-		return categories_list;
+		return null;
 	}
 	/**
 	*Borra una categoría indicada por el ID
 	*
 	*/
 	public static void deleteCategory(Integer category_id){
-		String cat=getObject(category_id);
-		if(cat!=null){
-			categories_list.remove(cat);
+		Category fakeCategory=new Category(category_id);
+		if(categories_list.contains(fakeCategory)){
+				categories_list.remove(isMyObjectThere(fakeCategory, categories_list));
+				System.out.println("Categoría removida con éxito");
+				return;
 		}
-
+		System.out.println("La categoría no se encuentra en el listado de categorías");
 	}
 
 

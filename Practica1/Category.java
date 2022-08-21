@@ -18,7 +18,16 @@ class Category{
 			this.category_id=category_id;
 			this.category=category;
 		}
-
+		/**
+		*Constructor para categoría cuyo único parámetro
+		*es el id de la Categoría
+		*@Params
+		*category_id
+		*/
+		Category(int category_id){
+			this.category_id=category_id;
+			this.category="NA";
+		}
 		/**
 		*Devuelve el Id de la categoría
 		*@returns
@@ -36,12 +45,15 @@ class Category{
 			return this.category;
 		}
 
-
-		public boolean equals(CategoryManager.Category c){
-			return this.category_id==c.getCategory_id();
+		@Override
+		public boolean equals(Object c){
+			if(c==this)return true;
+			if(!(c instanceof Category))return false;
+			Category cFromObject=(Category) c;
+			return this.category_id.equals(cFromObject.getCategory_id());
 		}
 		@Override
 		public String toString(){
-			return "Category_id: "+category_id.toString()+" Category: "+ category;
+			return this.category_id.toString()+", "+this.category;
 	}
 }
