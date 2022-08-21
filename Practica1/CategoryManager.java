@@ -4,6 +4,11 @@ import java.util.InputMismatchException;
 import java.util.Collection;
 
 
+/**
+*Clase CategoryManager, su objetivo es manejar a la clase Categoría
+*
+*
+*/
 public class CategoryManager{
 
 
@@ -70,11 +75,6 @@ public class CategoryManager{
 		}
 	}
 
-	/**
-	*Clase CategoryManager, su objetivo es manejar a la clase Categoría
-	*
-	*
-	*/
 
 	private static LinkedList<Category> categories_list= new LinkedList<>();
 	private static CategoryManager cm= new CategoryManager();
@@ -199,6 +199,6 @@ public class CategoryManager{
 				System.out.println("Categoría removida con éxito");
 				return;
 		}
-		System.out.println("La categoría no se encuentra en el listado de categorías");
+		System.out.println("No existe una categoría con el id ingresado");
 	}
 }
