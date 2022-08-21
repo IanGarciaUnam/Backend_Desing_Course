@@ -3,6 +3,14 @@ import java.util.Scanner;
 import java.util.InputMismatchException;
 
 
+	/**
+	*Clase Category
+	*Modela una Categoría a traves de los
+	*parámetros  dados, category_id y category; id de la categoría y nombre de las categorías
+	*respectivamente
+	*/
+
+
 class Category{
 		private Integer category_id;
 		private String category;

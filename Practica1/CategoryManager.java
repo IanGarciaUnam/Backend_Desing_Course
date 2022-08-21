@@ -6,22 +6,78 @@ import java.util.Collection;
 
 public class CategoryManager{
 
-	/**
-	*Clase Category
-	*Modela una Categoría a traves de los
-	*parámetros  dados, category_id y category; id de la categoría y nombre de las categorías
-	*respectivamente
-	*/
+
+		/**
+		*Clase Category
+		*Modela una Categoría a traves de los
+		*parámetros  dados, category_id y category; id de la categoría y nombre de las categorías
+		*respectivamente
+		*/
 
 
+	class Category{
+			private Integer category_id;
+			private String category;
+
+			/**
+			*Constructor de la clase Category
+			*
+			*@params
+			* int category_id : ID de la categoría
+			*	String category : nombre de la categoría
+			*/
+			Category(int category_id, String category){
+				this.category_id=category_id;
+				this.category=category;
+			}
+			/**
+			*Constructor para categoría cuyo único parámetro
+			*es el id de la Categoría
+			*@Params
+			*category_id
+			*/
+			Category(int category_id){
+				this.category_id=category_id;
+				this.category="NA";
+			}
+			/**
+			*Devuelve el Id de la categoría
+			*@returns
+			 *category_id
+			*/
+			public Integer getCategory_id(){
+				return this.category_id;
+			}
+			/*
+			*Devuelve el nombre de la categoría
+			*@returns
+			*category
+			*/
+			public String getCategory(){
+				return this.category;
+			}
+
+			@Override
+			public boolean equals(Object c){
+				if(c==this)return true;
+				if(!(c instanceof Category))return false;
+				Category cFromObject=(Category) c;
+				return this.category_id.equals(cFromObject.getCategory_id());
+			}
+			@Override
+			public String toString(){
+				return this.category_id.toString()+", "+this.category;
+		}
+	}
+
 	/**
-	*Clase CategoryManager, su objetivo es manejar a la clase categoría
+	*Clase CategoryManager, su objetivo es manejar a la clase Categoría
 	*
 	*
 	*/
 
 	private static LinkedList<Category> categories_list= new LinkedList<>();
-
+	private static CategoryManager cm= new CategoryManager();
 	public static void main(String[] args){
 
 	Scanner sc=new Scanner(System.in);
@@ -85,9 +141,9 @@ public class CategoryManager{
 	public static void createCategory(Integer category_id, String category){
 		//System.out.println(getObject(category_id).toString());
 		//CategoryManager cm= new CategoryManager();
-		Category c=new Category(category_id, category);
+		Category c=cm.new Category(category_id, category);
 		if(categories_list.contains(c)){
-				System.out.printf("Una categoría con el id %d ya se encuentra previamente registrada",c.getCategory_id());
+				System.out.printf("Una categoría con el id %d ya se encuentra previamente registrada\n",c.getCategory_id());
 				return;
 			}else{
 				categories_list.add(c);//revisar
@@ -116,7 +172,7 @@ public class CategoryManager{
 	*imprimiendola en pantalla
 	*/
 	public static void getCategory(Integer category_id){
-		Category fakeCategory=new Category(category_id);
+		Category fakeCategory=cm.new Category(category_id);
 		if(!categories_list.contains(fakeCategory)){
 			System.out.println("No existe una categoría con el id ingresado");
 			return;
@@ -137,7 +193,7 @@ public class CategoryManager{
 	*
 	*/
 	public static void deleteCategory(Integer category_id){
-		Category fakeCategory=new Category(category_id);
+		Category fakeCategory=cm.new Category(category_id);
 		if(categories_list.contains(fakeCategory)){
 				categories_list.remove(isMyObjectThere(fakeCategory, categories_list));
 				System.out.println("Categoría removida con éxito");
@@ -145,10 +201,4 @@ public class CategoryManager{
 		}
 		System.out.println("La categoría no se encuentra en el listado de categorías");
 	}
-
-
-
-
-
-
 }
