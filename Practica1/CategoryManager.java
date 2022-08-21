@@ -21,7 +21,9 @@ public class CategoryManager{
 
 
 	class Category{
+			/*Decidí que el id debería ser un número entero sin límites de tamaño*/
 			private Integer category_id;
+			/*La categoría quedará definida como un String, ya que permitirá ser más extensa e incluso explicativa*/
 			private String category;
 
 			/**
