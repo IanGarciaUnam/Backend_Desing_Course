@@ -21,7 +21,7 @@ public class ProductApplication {
 		cm.createCategory(3, "ferretería");
 		cm.createCategory(4, "autos");
 		cm.createCategory(5, "farmacia");
-		CtrlProduct.fromCatToAPI(cm.getCategories());
+		CtrlCategory.fromCatToAPI(cm.getCategories());
 	}
 
 }

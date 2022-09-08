@@ -13,7 +13,7 @@ import com.product.CategoryManager.Category;
 * a request relacionados con categoría
 */
 @RestController
-public class CtrlProduct{
+public class CtrlCategory{
 	private static LinkedList<HashMap<String, Object>> api_list=new LinkedList<>();
 
 
