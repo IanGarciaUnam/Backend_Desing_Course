@@ -7,7 +7,7 @@ package com.product.api.entity;
 */
 
 
-public class Category{
+public class Category implements Comparable<Category>{
   /*Decidí que el id debería ser un número entero sin límites de tamaño*/
   private Integer category_id;
   /*La categoría quedará definida como un String, ya que permitirá ser más extensa e incluso explicativa*/
@@ -94,10 +94,15 @@ public class Category{
     if(c==this)return true;
     if(!(c instanceof Category))return false;
     Category cFromObject=(Category) c;
-    return this.category_id.equals(cFromObject.getCategory_id());
+    return this.category_id.equals(cFromObject.getCategory_id()) || this.category.toLowerCase().equals(cFromObject.category.toLowerCase());
   }
   @Override
   public String toString(){
     return this.category_id.toString()+", "+this.category;
-}
+   }
+
+  @Override
+  public int compareTo(Category category){
+    return category.category_id >= this.category_id ? -1 : 0;
+  }
 }

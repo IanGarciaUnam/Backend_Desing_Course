@@ -61,6 +61,7 @@ public class CategoryManager{
 
 
   /*
+  *Actualiza el id de una categoría
   *
   */
     public static void updateIdCategory(Integer id, String category){
