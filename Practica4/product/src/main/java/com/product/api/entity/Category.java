@@ -1,4 +1,15 @@
 package com.product.api.entity;
+import org.springframework.web.bind.annotation.RequestMapping;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.Table;
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotNull;
+
 /**
 *Clase Category
 *Modela una Categoría a traves de los
@@ -6,15 +17,28 @@ package com.product.api.entity;
 *respectivamente
 */
 
-
-public class Category implements Comparable<Category>{
+@Entity
+@Table(name="category")
+public class Category {
   /*Decidí que el id debería ser un número entero sin límites de tamaño*/
+  @Id
+  @GeneratedValue(strategy=GenerationType.AUTO)
+  @Column(name="category_id")
   private Integer category_id;
   /*La categoría quedará definida como un String, ya que permitirá ser más extensa e incluso explicativa*/
+  @NotNull
+  @Column(name="category")
   private String category;
   /*Status de la categoría*/
+  @Column(name="status")
+  @Min(value = 0, message="status must be 0 or 1")
+  @Max(value = 1, message="status must be 0 or 1")
+  //@JsonIgnore
   private Integer status;
 
+  public Category(){
+
+  }
   /**
   *Constructor de la clase Category
   *
@@ -22,22 +46,23 @@ public class Category implements Comparable<Category>{
   * int category_id : ID de la categoría
   *	String category : nombre de la categoría
   */
-  public Category(int category_id, String category, Integer status){
+  /*public Category(int category_id, String category, Integer status){
     this.category_id=category_id;
     this.category=category;
     this.status=status;
-  }
+  }*/
   /**
   *Constructor para categoría cuyo único parámetro
   *es el id de la Categoría
   *@Params
   *category_id
   */
+  /*
   public Category(int category_id){
     this.category_id=category_id;
     this.category="NA";
     this.status=0;
-  }
+  }*/
   /**
   *Devuelve el Id de la categoría
   *@returns
@@ -98,11 +123,7 @@ public class Category implements Comparable<Category>{
   }
   @Override
   public String toString(){
-    return this.category_id.toString()+", "+this.category;
+    return "Category [category_id="+this.category_id.toString()+", category ="+this.category + ", status ="+this.status +"]";
    }
 
-  @Override
-  public int compareTo(Category category){
-    return category.category_id >= this.category_id ? -1 : 0;
-  }
 }

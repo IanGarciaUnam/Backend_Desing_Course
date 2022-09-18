@@ -12,7 +12,7 @@ import java.util.Collection;
 *
 */
 public class CategoryManager{
-
+/*
   public static LinkedList<Category> categories_list=new LinkedList<>();
    public CategoryManager(){
       categories_list= new LinkedList<>();
@@ -22,8 +22,8 @@ public class CategoryManager{
 	*El método crea una categoría y la añade a la lista de categorías
 	*@params
 	*category_id : Id de las categoría
-	*category : Nombre de la categoría
-	*/
+	*ctegory : Nombre de la categoría
+	*
 	public  static void createCategory(Integer category_id, String category, Integer status){
 		//System.out.println(getObject(category_id).toString());
 		Category c= new Category(category_id, category, status);
@@ -37,20 +37,21 @@ public class CategoryManager{
 
 	}
 
-	/**
+	**
 	*Devuelve una lista con la lista de las categorias registradas
 	*
-	*/
+	*
 	public  static LinkedList<Category> getCategories(){
     return categories_list;
 	}
+  */
 
   /**
   *Actualiza el id de la categoría
   *@Params:
   *id : Integer
   *nvoId : Integer
-  */
+  *
   public static void updateIdCategory(Integer id, Integer nvoId){
     Category c= getCategory(id);
     if(c!=null){
@@ -63,7 +64,7 @@ public class CategoryManager{
   /*
   *Actualiza el id de una categoría
   *
-  */
+  *
     public static void updateIdCategory(Integer id, String category){
       Category c= getCategory(id);
       if(c!=null){
@@ -71,11 +72,11 @@ public class CategoryManager{
       }
       System.out.println("Category doesn't exists");
     }
-	/**
+
 	*Devuelve la categoría correspondiente al ID
 	*@Returns
   *Category
-	*/
+
 	public  static Category getCategory(Integer category_id){
     for(Category c: categories_list){
         if(c.getCategory_id().equals(category_id))
@@ -92,10 +93,10 @@ public class CategoryManager{
 		}
 		return null;
 	}
-	/**
+	**
 	*Borra una categoría indicada por el ID
 	*
-	*/
+	*
 	public  void deleteCategory(Integer category_id){
 		Category fakeCategory= new Category(category_id);
 		if(categories_list.contains(fakeCategory)){
@@ -104,5 +105,5 @@ public class CategoryManager{
 				return;
 		}
 		System.out.println("No existe una categoría con el id ingresado");
-	}
+	}*/
 }

@@ -17,7 +17,7 @@ public class ProductApplication {
 
 	public static void main(String[] args) {
 		SpringApplication.run(ProductApplication.class, args);
-		CategoryManager cm = new CategoryManager();
+		/**CategoryManager cm = new CategoryManager();
 		cm.createCategory(1, "verduras",1);
 		cm.createCategory(2, "carnes",1);
 		cm.createCategory(3, "ferretería",1);
@@ -32,8 +32,9 @@ public class ProductApplication {
 		l.add(c2);
 		l.add(c3);
 		l.add(c4);
-		*/
+		
 		CtrlCategory cc= new CtrlCategory(cm.getCategories());//.fromCatToAPI(cm.getCategories());
+		*/
 	}
 
 }
