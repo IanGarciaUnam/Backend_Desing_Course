@@ -9,7 +9,7 @@ import javax.persistence.Table;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
-
+import com.fasterxml.jackson.annotation.JsonIgnore;
 /**
 *Clase Category
 *Modela una Categoría a traves de los
@@ -22,7 +22,7 @@ import javax.validation.constraints.NotNull;
 public class Category {
   /*Decidí que el id debería ser un número entero sin límites de tamaño*/
   @Id
-  @GeneratedValue(strategy=GenerationType.AUTO)
+  @GeneratedValue(strategy=GenerationType.IDENTITY)
   @Column(name="category_id")
   private Integer category_id;
   /*La categoría quedará definida como un String, ya que permitirá ser más extensa e incluso explicativa*/
@@ -33,36 +33,16 @@ public class Category {
   @Column(name="status")
   @Min(value = 0, message="status must be 0 or 1")
   @Max(value = 1, message="status must be 0 or 1")
-  //@JsonIgnore
+  @JsonIgnore
   private Integer status;
 
+  /**
+  *Constructor vacío de la clase
+  */
   public Category(){
 
   }
-  /**
-  *Constructor de la clase Category
-  *
-  *@params
-  * int category_id : ID de la categoría
-  *	String category : nombre de la categoría
-  */
-  /*public Category(int category_id, String category, Integer status){
-    this.category_id=category_id;
-    this.category=category;
-    this.status=status;
-  }*/
-  /**
-  *Constructor para categoría cuyo único parámetro
-  *es el id de la Categoría
-  *@Params
-  *category_id
-  */
-  /*
-  public Category(int category_id){
-    this.category_id=category_id;
-    this.category="NA";
-    this.status=0;
-  }*/
+
   /**
   *Devuelve el Id de la categoría
   *@returns

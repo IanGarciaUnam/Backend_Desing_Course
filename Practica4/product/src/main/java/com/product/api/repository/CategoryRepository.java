@@ -13,8 +13,16 @@ import com.product.api.entity.Category;
 @Repository
 public interface CategoryRepository extends JpaRepository<Category, Integer>{
 
-    @Query(value = "SELECT * from category where id = :category_id AND status = 1", nativeQuery=true)
-    List<Category> findByCategoryId(@Param("category_id") Integer category_id);
+
+    @Query(value = "SELECT * from category where status = :status", nativeQuery=true)
+    List<Category> findByStatus(@Param("status") Integer status);
+
+
+    @Query(value = "SELECT * from category where category_id = :category_id AND status = 1", nativeQuery=true)
+    Category findByCategoryId(@Param("category_id") Integer category_id);
+
+    @Query(value = "SELECT * from category where category = :category", nativeQuery=true)
+    Category findByCategory(@Param("category") String category);
 
     @Modifying
     @Transactional
@@ -25,7 +33,7 @@ public interface CategoryRepository extends JpaRepository<Category, Integer>{
     @Modifying
     @Transactional
     @Query(value = "UPDATE category SET category = :category WHERE category_id = :category_id", nativeQuery = true)
-    Integer updateRegion(@Param("category_id") Integer category_id, @Param("category") String category);
+    Integer updateCategory(@Param("category_id") Integer category_id, @Param("category") String category);
 
 
     @Modifying
