@@ -2,6 +2,7 @@ package com.product.api.service;
 import org.springframework.boot.SpringApplication;
 import java.util.List;
 import com.product.api.entity.Category;
+import com.product.api.dto.ApiResponse;
 
 public interface SVCCategory{
 

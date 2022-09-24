@@ -1,6 +1,6 @@
 package com.product.api.controller;
-import org.springframework.boot.SpringApplication;
 
+import org.springframework.boot.SpringApplication;
 import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -24,7 +24,7 @@ import com.product.api.entity.Category;
 import com.product.api.repository.CategoryRepository;
 import com.product.api.service.SVCCategory;
 import com.product.api.dto.ApiResponse;
-
+import com.product.exception.ApiException;
 /**
 *Clase RestController para el control del envío respuesta
 * a request relacionados con categoría
