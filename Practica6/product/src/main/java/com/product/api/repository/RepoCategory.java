@@ -11,7 +11,7 @@ import com.product.api.entity.Category;
 // This will be AUTO IMPLEMENTED by Spring into a Bean called userRepository
 // CRUD refers Create, Read, Update, Delete
 @Repository
-public interface CategoryRepository extends JpaRepository<Category, Integer>{
+public interface RepoCategory extends JpaRepository<Category, Integer>{
 
 
     @Query(value = "SELECT * from category where status = :status", nativeQuery=true)
@@ -20,6 +20,10 @@ public interface CategoryRepository extends JpaRepository<Category, Integer>{
 
     @Query(value = "SELECT * from category where category_id = :category_id AND status = 1", nativeQuery=true)
     Category findByCategoryId(@Param("category_id") Integer category_id);
+
+    @Query(value = "SELECT * from category where category_id = :category_id AND status = 1", nativeQuery=true)
+    Category getCategory(@Param("category_id") Integer category_id);
+
 
     @Query(value = "SELECT * from category where category = :category", nativeQuery=true)
     Category findByCategory(@Param("category") String category);

@@ -4,7 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
-
+import java.sql.SQLIntegrityConstraintViolationException;
 import com.product.api.dto.ApiResponse;
 import com.product.api.entity.Product;
 import com.product.api.repository.RepoCategory;
@@ -16,13 +16,13 @@ public class SvcProductImp implements SvcProduct {
 
 	@Autowired
 	RepoProduct repo;
-	
+
 	@Autowired
 	RepoCategory repoCategory;
 
 	@Override
 	public Product getProduct(String gtin) {
-		Product product = null; // sustituir null por la llamada al método implementado en el repositorio
+		Product product = repo.findByGTIN(gtin); // sustituir null por la llamada al método implementado en el repositorio
 		if (product != null) {
 			product.setCategory(repoCategory.getCategory(product.getCategory_id()));
 			return product;
@@ -34,13 +34,38 @@ public class SvcProductImp implements SvcProduct {
 	 * 4. Implementar el método createProduct considerando las siguientes validaciones:
   		1. validar que la categoría del nuevo producto exista
   		2. el código GTIN y el nombre del producto son únicos
-  		3. si al intentar realizar un nuevo registro ya existe un producto con el mismo GTIN pero tiene estatus 0, 
+  		3. si al intentar realizar un nuevo registro ya existe un producto con el mismo GTIN pero tiene estatus 0,
   		   entonces se debe cambiar el estatus del producto existente a 1 y actualizar sus datos con los del nuevo registro
 	 */
 	@Override
 	public ApiResponse createProduct(Product in) {
-		return null;
+		Product pr=(Product) repo.findByGTIN(in.getGtin());
+		if(pr!=null){
+			if(pr.getStatus()==0){
+				repo.activateProduct(pr.getProduct_id());
+				return new ApiResponse("product has been activated");
+			}else{
+				throw new ApiException(HttpStatus.BAD_REQUEST,"product already exists");
+			}
+		}
+		repo.createProduct(in.getGtin(), in.getProduct(), in.getDescription(), in.getPrice(), in.getStock(), in.getCategory_id());
+		return new ApiResponse("product created");
 	}
+
+/**
+	public ApiResponse createCategory(Category category){
+		Category cat=(Category) categoryRepository.findByCategory(category.getCategory());
+		if(cat !=null){
+			if(cat.getStatus()==0){
+				categoryRepository.activateCategory(cat.getCategory_id());
+				return new ApiResponse( "region has been activated");
+			}else{
+				throw new ApiException(HttpStatus.BAD_REQUEST,"region already exists");
+			}
+		}
+		categoryRepository.createCategory(category.getCategory());
+		return new ApiResponse("region created");
+	}*/
 
 	@Override
 	public ApiResponse updateProduct(Product in, Integer id) {
@@ -74,7 +99,7 @@ public class SvcProductImp implements SvcProduct {
 		Product product = getProduct(gtin);
 		if(stock > product.getStock())
 			throw new ApiException(HttpStatus.BAD_REQUEST, "stock to update is invalid");
-		
+
 		repo.updateProductStock(gtin, product.getStock() - stock);
 		return new ApiResponse("product stock updated");
 	}

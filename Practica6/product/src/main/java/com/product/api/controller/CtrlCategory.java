@@ -21,7 +21,7 @@ import java.util.HashMap;
 import java.util.Collections;
 import com.product.api.entity.CategoryManager;
 import com.product.api.entity.Category;
-import com.product.api.repository.CategoryRepository;
+import com.product.api.repository.RepoCategory;
 import com.product.api.service.SVCCategory;
 import com.product.api.dto.ApiResponse;
 import com.product.exception.ApiException;
