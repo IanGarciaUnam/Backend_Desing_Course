@@ -38,8 +38,8 @@ public class CtrlProduct {
 	*
 	*/
 	@GetMapping
-	public ResponseEntity<List<Product>> getProduct(){
-		return new ResponseEntity<>((null), HttpStatus.NOT_FOUND);
+	public ResponseEntity<String> getProduct(){
+		return new ResponseEntity<>("Action not available for products", HttpStatus.NOT_FOUND);
 	}
 
 	/**
@@ -67,6 +67,13 @@ public class CtrlProduct {
 	}
 
 	// 2. Implementar método updateProductStock
+
+	@PutMapping("/{gtin}/{stock}")
+	public ResponseEntity<ApiResponse> updateProductStock(@PathVariable("gtin") String gtin, @PathVariable("stock") Integer stock, BindingResult bindingResult){
+		if(bindingResult.hasErrors())
+			throw new ApiException(HttpStatus.BAD_REQUEST, bindingResult.getAllErrors().get(0).getDefaultMessage());
+		return new ResponseEntity<>(svc.updateProductStock(gtin, stock),HttpStatus.OK);
+	}
 
 	@DeleteMapping("/{id}")
 	public ResponseEntity<ApiResponse> deleteProduct(@PathVariable("id") Integer id){

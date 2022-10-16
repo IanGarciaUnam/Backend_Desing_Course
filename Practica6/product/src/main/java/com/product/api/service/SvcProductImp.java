@@ -2,6 +2,7 @@ package com.product.api.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
+import javax.validation.ConstraintViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import java.sql.SQLIntegrityConstraintViolationException;
@@ -39,7 +40,9 @@ public class SvcProductImp implements SvcProduct {
 	 */
 	@Override
 	public ApiResponse createProduct(Product in) {
-		Product pr=(Product) repo.findByGTIN(in.getGtin());
+
+
+		/*Product pr=(Product) repo.findByGTIN(in.getGtin());
 		if(pr!=null){
 			if(pr.getStatus()==0){
 				repo.activateProduct(pr.getProduct_id());
@@ -49,6 +52,23 @@ public class SvcProductImp implements SvcProduct {
 			}
 		}
 		repo.createProduct(in.getGtin(), in.getProduct(), in.getDescription(), in.getPrice(), in.getStock(), in.getCategory_id());
+		*/
+		in.setStatus(1);
+		try{
+			repo.save(in);
+		}catch(ConstraintViolationException e){
+			if(e.getLocalizedMessage().contains("gtin"))
+				throw new ApiException(HttpStatus.BAD_REQUEST, "product gtin already exists");
+			if(e.getLocalizedMessage().contains("product"))
+				throw new ApiException(HttpStatus.BAD_REQUEST, "product name already exists");
+		}catch(DataIntegrityViolationException e){
+			if(e.getLocalizedMessage().contains("gtin"))
+				throw new ApiException(HttpStatus.BAD_REQUEST, "product gtin already exists");
+			if(e.getLocalizedMessage().contains("product"))
+				throw new ApiException(HttpStatus.BAD_REQUEST, "product name already exists");
+			if (e.contains(SQLIntegrityConstraintViolationException.class))
+				throw new ApiException(HttpStatus.BAD_REQUEST, "category not found");
+		}
 		return new ApiResponse("product created");
 	}
 
