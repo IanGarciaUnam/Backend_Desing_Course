@@ -59,17 +59,14 @@ public class SvcProductImp implements SvcProduct {
 			}
 		}*/catch(DataIntegrityViolationException e){
 			Product pr =(Product) repo.findByGTINnotStatusMarked(in.getGtin());
-
 			if(e.getLocalizedMessage().contains("gtin") && (pr==null || pr.getStatus()==1)){
 				throw new ApiException(HttpStatus.BAD_REQUEST, "product gtin already exists");
 			}else if (e.getLocalizedMessage().contains("gtin") && pr.getStatus()==0){
 				repo.activateProductByGTIN(pr.getGtin());
+				repo.updateProduct(pr.getProduct_id(), pr.getGtin(), in.getProduct(), in.getDescription(), in.getPrice(), in.getStock(),in.getCategory_id());
 				return new ApiResponse("product activated");
 			}else if(e.getLocalizedMessage().contains("product") && (pr==null || pr.getStatus()==1)){
 				throw new ApiException(HttpStatus.BAD_REQUEST, "product name already exists");
-			}else  if (e.getLocalizedMessage().contains("product") && pr.getStatus()==0){
-				repo.activateProductByProductName(pr.getProduct());
-				return new ApiResponse("product activated");
 			}else if (e.contains(SQLIntegrityConstraintViolationException.class))
 						throw new ApiException(HttpStatus.BAD_REQUEST, "category not found");
 		}
