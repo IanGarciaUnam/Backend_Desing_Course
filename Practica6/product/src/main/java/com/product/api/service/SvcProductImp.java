@@ -40,19 +40,6 @@ public class SvcProductImp implements SvcProduct {
 	 */
 	@Override
 	public ApiResponse createProduct(Product in) {
-
-
-		/*Product pr=(Product) repo.findByGTIN(in.getGtin());
-		if(pr!=null){
-			if(pr.getStatus()==0){
-				repo.activateProduct(pr.getProduct_id());
-				return new ApiResponse("product has been activated");
-			}else{
-				throw new ApiException(HttpStatus.BAD_REQUEST,"product already exists");
-			}
-		}
-		repo.createProduct(in.getGtin(), in.getProduct(), in.getDescription(), in.getPrice(), in.getStock(), in.getCategory_id());
-		*/
 		in.setStatus(1);
 		try{
 			repo.save(in);

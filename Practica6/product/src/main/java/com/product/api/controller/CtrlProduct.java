@@ -23,7 +23,7 @@ import com.product.api.dto.ApiResponse;
 import com.product.api.entity.Product;
 import com.product.api.service.SvcProduct;
 import com.product.exception.ApiException;
-
+import com.product.api.dto.DTOCategory;
 @RestController
 @RequestMapping("/product")
 public class CtrlProduct {
@@ -68,10 +68,10 @@ public class CtrlProduct {
 
 	// 2. Implementar método updateProductStock
 
-	@PutMapping("/{gtin}/{stock}")
-	public ResponseEntity<ApiResponse> updateProductStock(@PathVariable("gtin") String gtin, @PathVariable("stock") Integer stock, BindingResult bindingResult){
-		if(bindingResult.hasErrors())
-			throw new ApiException(HttpStatus.BAD_REQUEST, bindingResult.getAllErrors().get(0).getDefaultMessage());
+	@PutMapping("/{gtin}/stock/{stock}")
+	public ResponseEntity<ApiResponse> updateProductStock(@PathVariable("gtin") String gtin, @PathVariable("stock") Integer stock){
+		//if(bindingResult.hasErrors())
+			//throw new ApiException(HttpStatus.BAD_REQUEST, bindingResult.getAllErrors().get(0).getDefaultMessage());
 		return new ResponseEntity<>(svc.updateProductStock(gtin, stock),HttpStatus.OK);
 	}
 
