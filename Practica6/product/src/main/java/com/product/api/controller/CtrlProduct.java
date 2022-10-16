@@ -54,8 +54,8 @@ public class CtrlProduct {
 
 	@PostMapping
 	public ResponseEntity<ApiResponse> createProduct(@Valid @RequestBody Product in, BindingResult bindingResult){
-		if(bindingResult.hasErrors())
-			throw new ApiException(HttpStatus.BAD_REQUEST, bindingResult.getAllErrors().get(0).getDefaultMessage());
+		//if(bindingResult.hasErrors())
+			//throw new ApiException(HttpStatus.BAD_REQUEST, bindingResult.getAllErrors().get(0).getDefaultMessage());
 		return new ResponseEntity<>(svc.createProduct(in),HttpStatus.OK);
 	}
 

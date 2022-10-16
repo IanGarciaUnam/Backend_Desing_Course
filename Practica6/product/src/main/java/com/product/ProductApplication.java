@@ -1,7 +1,6 @@
 package com.product;
 import com.product.api.controller.CtrlCategory;
 import com.product.api.entity.Category;
-import com.product.api.entity.CategoryManager;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import java.util.LinkedList;
@@ -32,7 +31,7 @@ public class ProductApplication {
 		l.add(c2);
 		l.add(c3);
 		l.add(c4);
-		
+
 		CtrlCategory cc= new CtrlCategory(cm.getCategories());//.fromCatToAPI(cm.getCategories());
 		*/
 	}

@@ -19,7 +19,6 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.HashMap;
 import java.util.Collections;
-import com.product.api.entity.CategoryManager;
 import com.product.api.entity.Category;
 import com.product.api.repository.RepoCategory;
 import com.product.api.service.SVCCategory;

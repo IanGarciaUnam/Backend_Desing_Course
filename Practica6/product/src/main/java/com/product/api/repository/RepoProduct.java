@@ -21,10 +21,23 @@ public interface RepoProduct extends JpaRepository<Product, Integer>{
 	@Query(value = "SELECT * from product where gtin = :gtin and status=1", nativeQuery=true)
 	Product findByGTIN(@Param("gtin") String gtin);
 
+	@Query(value = "SELECT * from product where gtin = :gtin", nativeQuery=true)
+	Product findByGTINnotStatusMarked(@Param("gtin") String gtin);
+
 	@Modifying
 	@Transactional
 	@Query(value = "UPDATE product SET status = 1 WHERE product_id = :product_id", nativeQuery = true)
 	Integer activateProduct(@Param("product_id") Integer product_id);
+
+	@Modifying
+	@Transactional
+	@Query(value = "UPDATE product SET status = 1 WHERE gtin = :gtin", nativeQuery = true)
+	Integer activateProductByGTIN(@Param("gtin") String gtin);
+
+	@Modifying
+	@Transactional
+	@Query(value = "UPDATE product SET status = 1 WHERE product = :product", nativeQuery = true)
+	Integer activateProductByProductName(@Param("product") String product);
 
 	@Modifying
 	@Transactional

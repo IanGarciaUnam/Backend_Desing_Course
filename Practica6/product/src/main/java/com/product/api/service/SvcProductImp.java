@@ -43,18 +43,35 @@ public class SvcProductImp implements SvcProduct {
 		in.setStatus(1);
 		try{
 			repo.save(in);
-		}catch(ConstraintViolationException e){
-			if(e.getLocalizedMessage().contains("gtin"))
+		}/*catch(ConstraintViolationException e){
+			Product pr =(Product) repo.findByGTIN(in.getGtin());
+			if(e.getLocalizedMessage().contains("gtin") && pr.getStatus()==1){
 				throw new ApiException(HttpStatus.BAD_REQUEST, "product gtin already exists");
-			if(e.getLocalizedMessage().contains("product"))
+			}else{
+				repo.activateProductByGTIN(pr.getGtin());
+				return new ApiResponse("product activated");
+			}
+			if(e.getLocalizedMessage().contains("product") && pr.getStatus()==1){
 				throw new ApiException(HttpStatus.BAD_REQUEST, "product name already exists");
-		}catch(DataIntegrityViolationException e){
-			if(e.getLocalizedMessage().contains("gtin"))
+			}else{
+				repo.activateProductByProductName(pr.getProduct());
+				return new ApiResponse("product activated");
+			}
+		}*/catch(DataIntegrityViolationException e){
+			Product pr =(Product) repo.findByGTINnotStatusMarked(in.getGtin());
+
+			if(e.getLocalizedMessage().contains("gtin") && (pr==null || pr.getStatus()==1)){
 				throw new ApiException(HttpStatus.BAD_REQUEST, "product gtin already exists");
-			if(e.getLocalizedMessage().contains("product"))
+			}else if (e.getLocalizedMessage().contains("gtin") && pr.getStatus()==0){
+				repo.activateProductByGTIN(pr.getGtin());
+				return new ApiResponse("product activated");
+			}else if(e.getLocalizedMessage().contains("product") && (pr==null || pr.getStatus()==1)){
 				throw new ApiException(HttpStatus.BAD_REQUEST, "product name already exists");
-			if (e.contains(SQLIntegrityConstraintViolationException.class))
-				throw new ApiException(HttpStatus.BAD_REQUEST, "category not found");
+			}else  if (e.getLocalizedMessage().contains("product") && pr.getStatus()==0){
+				repo.activateProductByProductName(pr.getProduct());
+				return new ApiResponse("product activated");
+			}else if (e.contains(SQLIntegrityConstraintViolationException.class))
+						throw new ApiException(HttpStatus.BAD_REQUEST, "category not found");
 		}
 		return new ApiResponse("product created");
 	}
