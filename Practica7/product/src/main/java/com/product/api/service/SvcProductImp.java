@@ -11,7 +11,7 @@ import com.product.api.entity.Product;
 import com.product.api.repository.RepoCategory;
 import com.product.api.repository.RepoProduct;
 import com.product.exception.ApiException;
-
+import com.product.api.dto.DTOCategory;
 @Service
 public class SvcProductImp implements SvcProduct {
 
@@ -43,21 +43,7 @@ public class SvcProductImp implements SvcProduct {
 		in.setStatus(1);
 		try{
 			repo.save(in);
-		}/*catch(ConstraintViolationException e){
-			Product pr =(Product) repo.findByGTIN(in.getGtin());
-			if(e.getLocalizedMessage().contains("gtin") && pr.getStatus()==1){
-				throw new ApiException(HttpStatus.BAD_REQUEST, "product gtin already exists");
-			}else{
-				repo.activateProductByGTIN(pr.getGtin());
-				return new ApiResponse("product activated");
-			}
-			if(e.getLocalizedMessage().contains("product") && pr.getStatus()==1){
-				throw new ApiException(HttpStatus.BAD_REQUEST, "product name already exists");
-			}else{
-				repo.activateProductByProductName(pr.getProduct());
-				return new ApiResponse("product activated");
-			}
-		}*/catch(DataIntegrityViolationException e){
+		}catch(DataIntegrityViolationException e){
 			Product pr =(Product) repo.findByGTINnotStatusMarked(in.getGtin());
 			if(e.getLocalizedMessage().contains("gtin") && (pr==null || pr.getStatus()==1)){
 				throw new ApiException(HttpStatus.BAD_REQUEST, "product gtin already exists");
@@ -73,20 +59,6 @@ public class SvcProductImp implements SvcProduct {
 		return new ApiResponse("product created");
 	}
 
-/**
-	public ApiResponse createCategory(Category category){
-		Category cat=(Category) categoryRepository.findByCategory(category.getCategory());
-		if(cat !=null){
-			if(cat.getStatus()==0){
-				categoryRepository.activateCategory(cat.getCategory_id());
-				return new ApiResponse( "region has been activated");
-			}else{
-				throw new ApiException(HttpStatus.BAD_REQUEST,"region already exists");
-			}
-		}
-		categoryRepository.createCategory(category.getCategory());
-		return new ApiResponse("region created");
-	}*/
 
 	@Override
 	public ApiResponse updateProduct(Product in, Integer id) {
@@ -123,5 +95,17 @@ public class SvcProductImp implements SvcProduct {
 
 		repo.updateProductStock(gtin, product.getStock() - stock);
 		return new ApiResponse("product stock updated");
+	}
+
+	@Override
+	public ApiResponse updateProductCategory(String gtin, DTOCategory dto){
+		Product p= (Product) repo.findByGTINnotStatusMarked(gtin);
+		if(p==null)
+			throw new ApiException(HttpStatus.BAD_REQUEST, "category not found");
+		if(p.getStatus()==0)
+			throw new ApiException(HttpStatus.NOT_FOUND, "product doesn't exists");
+
+		repo.updateProductCategory(gtin,dto.getCategory_id());
+		return new ApiResponse("product category updated");
 	}
 }

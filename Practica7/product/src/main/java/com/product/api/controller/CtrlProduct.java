@@ -75,6 +75,15 @@ public class CtrlProduct {
 		return new ResponseEntity<>(svc.updateProductStock(gtin, stock),HttpStatus.OK);
 	}
 
+	@PutMapping("/{gtin}/category")
+	public ResponseEntity<ApiResponse> updateProductCategory(@PathVariable("gtin") String gtin, @Valid @RequestBody DTOCategory dtoCategory){
+		System.out.println("hola uwu");
+		//if(bindingResult.hasErrors())
+			//throw new ApiException(HttpStatus.BAD_REQUEST, bindingResult.getAllErrors().get(0).getDefaultMessage());
+		System.out.println(dtoCategory.getCategory_id());
+		return new ResponseEntity<>(svc.updateProductCategory(gtin, dtoCategory), HttpStatus.OK);
+	}
+
 	@DeleteMapping("/{id}")
 	public ResponseEntity<ApiResponse> deleteProduct(@PathVariable("id") Integer id){
 		return new ResponseEntity<>(svc.deleteProduct(id), HttpStatus.OK);

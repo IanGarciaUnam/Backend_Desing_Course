@@ -2,7 +2,7 @@ package com.product.api.service;
 
 import com.product.api.dto.ApiResponse;
 import com.product.api.entity.Product;
-
+import com.product.api.dto.DTOCategory;
 public interface SvcProduct {
 
 	public Product getProduct(String gtin);
@@ -10,5 +10,5 @@ public interface SvcProduct {
 	public ApiResponse updateProduct(Product in, Integer id);
 	public ApiResponse updateProductStock(String gtin, Integer stock);
 	public ApiResponse deleteProduct(Integer id);
-
+	public ApiResponse updateProductCategory(String gtin, DTOCategory dto);
 }
