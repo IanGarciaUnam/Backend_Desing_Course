@@ -7,6 +7,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 import com.product.api.entity.Category;
+import com.product.api.entity.Product;
 
 // This will be AUTO IMPLEMENTED by Spring into a Bean called userRepository
 // CRUD refers Create, Read, Update, Delete
@@ -16,11 +17,6 @@ public interface RepoCategory extends JpaRepository<Category, Integer>{
 
     @Query(value = "SELECT * from category where status = :status", nativeQuery=true)
     List<Category> findByStatus(@Param("status") Integer status);
-
-    @Query(value = "SELECT * from product where category_id = :category_id", nativeQuery=true)
-    List<Category> getListProducts(@Param("category_id") Integer category_id);
-
-
 
     @Query(value = "SELECT * from category where category_id = :category_id AND status = 1", nativeQuery=true)
     Category findByCategoryId(@Param("category_id") Integer category_id);

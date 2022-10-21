@@ -18,6 +18,9 @@ public interface RepoProduct extends JpaRepository<Product, Integer>{
 	@Query(value = "SELECT * from product where status = :status", nativeQuery=true)
 	List<Product> findByStatus(@Param("status") Integer status);
 
+	@Query(value = "SELECT * from product where category_id = :category_id AND status=1", nativeQuery=true)
+	List<Product> getListProducts(@Param("category_id") Integer category_id);
+
 	@Query(value = "SELECT * from product where gtin = :gtin and status=1", nativeQuery=true)
 	Product findByGTIN(@Param("gtin") String gtin);
 

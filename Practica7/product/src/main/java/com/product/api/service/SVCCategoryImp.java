@@ -2,9 +2,13 @@ package com.product.api.service;
 import org.springframework.boot.SpringApplication;
 import org.springframework.stereotype.Service;
 import java.util.List;
+import java.util.LinkedList;
+
 import org.springframework.http.HttpStatus;
 import com.product.api.entity.Category;
+import com.product.api.entity.Product;
 import com.product.api.repository.RepoCategory;
+import com.product.api.repository.RepoProduct;
 import com.product.api.service.SVCCategory;
 import org.springframework.beans.factory.annotation.Autowired;
 import com.product.api.dto.ApiResponse;
@@ -15,6 +19,9 @@ public class SVCCategoryImp implements SVCCategory {
 
     @Autowired
     RepoCategory categoryRepository;
+
+    @Autowired
+    RepoProduct productRepository;
 
     @Override
     public List<Category> getCategories(){
@@ -51,7 +58,9 @@ public class SVCCategoryImp implements SVCCategory {
       if(cat==null){
         throw new ApiException(HttpStatus.NOT_FOUND, "category does not exists");
       } else if(cat.getStatus()==0){
-        throw new ApiException(HttpStatus.BAD_REQUEST,"category is not active");
+        categoryRepository.activateCategory(cat.getCategory_id());
+        categoryRepository.updateCategory(id, category.getCategory());
+        return new ApiResponse( "category has been activated");
       }
 
        Category ext=(Category)categoryRepository.findByCategory(category.getCategory());
@@ -76,16 +85,16 @@ public class SVCCategoryImp implements SVCCategory {
 
     @Override
     public List<DTOProductCategory> getListProducts(Integer id){
-      List<Category> cat= categoryRepository.getListProducts(id);
+      List<Product> products= productRepository.getListProducts(id);
       List<DTOProductCategory> dtoProductCategory= new LinkedList<>();
-      for(Category c: cat){
-          dtoProductCategory.add(becomeCatInDTOCat(c));
+      for(Product p: products){
+          dtoProductCategory.add(becomeProductToDTO(p));
       }
-      return dtoProductCategory
+      return dtoProductCategory;
     }
 
-    private DTOProductCategory becomeCatInDTOCat(Category c){
-      return new DTOProductCategory(c.getProduct_id(), c.getGTIN(), c.getProduct(), c.getPrice());
+    private DTOProductCategory becomeProductToDTO(Product p){
+      return new DTOProductCategory(p.getProduct_id(), p.getGtin(), p.getProduct(), p.getPrice());
     }
 
 
