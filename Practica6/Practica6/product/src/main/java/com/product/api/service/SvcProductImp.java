@@ -8,9 +8,11 @@ import org.springframework.stereotype.Service;
 import java.sql.SQLIntegrityConstraintViolationException;
 import com.product.api.dto.ApiResponse;
 import com.product.api.entity.Product;
+import com.product.api.entity.Category;
 import com.product.api.repository.RepoCategory;
 import com.product.api.repository.RepoProduct;
 import com.product.exception.ApiException;
+
 
 @Service
 public class SvcProductImp implements SvcProduct {
@@ -25,6 +27,9 @@ public class SvcProductImp implements SvcProduct {
 	public Product getProduct(String gtin) {
 		Product product = repo.findByGTIN(gtin); // sustituir null por la llamada al método implementado en el repositorio
 		if (product != null) {
+			Category c=(Category) repoCategory.getCategory(product.getCategory_id());
+			if(c==null)
+				throw new ApiException(HttpStatus.NOT_FOUND, "category non active");
 			product.setCategory(repoCategory.getCategory(product.getCategory_id()));
 			return product;
 		}else
@@ -43,21 +48,7 @@ public class SvcProductImp implements SvcProduct {
 		in.setStatus(1);
 		try{
 			repo.save(in);
-		}/*catch(ConstraintViolationException e){
-			Product pr =(Product) repo.findByGTIN(in.getGtin());
-			if(e.getLocalizedMessage().contains("gtin") && pr.getStatus()==1){
-				throw new ApiException(HttpStatus.BAD_REQUEST, "product gtin already exists");
-			}else{
-				repo.activateProductByGTIN(pr.getGtin());
-				return new ApiResponse("product activated");
-			}
-			if(e.getLocalizedMessage().contains("product") && pr.getStatus()==1){
-				throw new ApiException(HttpStatus.BAD_REQUEST, "product name already exists");
-			}else{
-				repo.activateProductByProductName(pr.getProduct());
-				return new ApiResponse("product activated");
-			}
-		}*/catch(DataIntegrityViolationException e){
+		}catch(DataIntegrityViolationException e){
 			Product pr =(Product) repo.findByGTINnotStatusMarked(in.getGtin());
 			if(e.getLocalizedMessage().contains("gtin") && (pr==null || pr.getStatus()==1)){
 				throw new ApiException(HttpStatus.BAD_REQUEST, "product gtin already exists");
@@ -67,26 +58,15 @@ public class SvcProductImp implements SvcProduct {
 				return new ApiResponse("product activated");
 			}else if(e.getLocalizedMessage().contains("product") && (pr==null || pr.getStatus()==1)){
 				throw new ApiException(HttpStatus.BAD_REQUEST, "product name already exists");
+			}else if(repoCategory.findByCategoryId(pr.getCategory_id())==null){
+				throw new ApiException(HttpStatus.BAD_REQUEST, "category not found");
 			}else if (e.contains(SQLIntegrityConstraintViolationException.class))
-						throw new ApiException(HttpStatus.BAD_REQUEST, "category not found");
+						throw new ApiException(HttpStatus.NOT_FOUND, "category not found");
 		}
 		return new ApiResponse("product created");
 	}
 
-/**
-	public ApiResponse createCategory(Category category){
-		Category cat=(Category) categoryRepository.findByCategory(category.getCategory());
-		if(cat !=null){
-			if(cat.getStatus()==0){
-				categoryRepository.activateCategory(cat.getCategory_id());
-				return new ApiResponse( "region has been activated");
-			}else{
-				throw new ApiException(HttpStatus.BAD_REQUEST,"region already exists");
-			}
-		}
-		categoryRepository.createCategory(category.getCategory());
-		return new ApiResponse("region created");
-	}*/
+
 
 	@Override
 	public ApiResponse updateProduct(Product in, Integer id) {
