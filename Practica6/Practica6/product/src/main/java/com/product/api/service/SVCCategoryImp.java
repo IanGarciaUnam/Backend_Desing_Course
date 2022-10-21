@@ -31,18 +31,12 @@ public class SVCCategoryImp implements SVCCategory {
 
     @Override
     public ApiResponse createCategory(Category category){
-      Category cat=(Category) categoryRepository.findByCategoryIdNotStatusMarked(category.getCategory_id());
-      if(cat !=null){
-        if(cat.getStatus()==0){
-          Category cat2=(Category) categoryRepository.findByCategory(category.getCategory());
-          if(cat2==null){
-            categoryRepository.activateCategory(cat.getCategory_id());
-            categoryRepository.updateCategory(cat.getCategory_id(),category.getCategory());
-              return new ApiResponse( "category has been activated");
-          }else{
-            throw new ApiException(HttpStatus.BAD_REQUEST,"category already exists");
-          }
-
+      Category cat2=(Category) categoryRepository.findByCategory(category.getCategory());
+      if(cat2 !=null){
+        if(cat2.getStatus()==0){
+            categoryRepository.activateCategory(cat2.getCategory_id());
+            categoryRepository.updateCategory(cat2.getCategory_id(),cat2.getCategory());
+            return new ApiResponse( "category has been activated");
         }else{
           throw new ApiException(HttpStatus.BAD_REQUEST,"category already exists");
         }
