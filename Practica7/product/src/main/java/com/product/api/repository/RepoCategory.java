@@ -21,6 +21,10 @@ public interface RepoCategory extends JpaRepository<Category, Integer>{
     @Query(value = "SELECT * from category where category_id = :category_id AND status = 1", nativeQuery=true)
     Category findByCategoryId(@Param("category_id") Integer category_id);
 
+    @Query(value = "SELECT * from category where category_id = :category_id", nativeQuery=true)
+    Category findByCategoryIdNotStatusMarked(@Param("category_id") Integer category_id);
+
+
     @Query(value = "SELECT * from category where category_id = :category_id AND status = 1", nativeQuery=true)
     Category getCategory(@Param("category_id") Integer category_id);
 

@@ -54,8 +54,8 @@ public class CtrlCategory {
 	*/
 	@GetMapping("/{id}")
 	@ResponseBody
-	public ResponseEntity<List<DTOProductCategory>> getProductsByCategoryId(@PathVariable Integer id){
-		return new ResponseEntity<>(svc.getListProducts(id), HttpStatus.OK);
+	public ResponseEntity<Category> getProductsByCategoryId(@PathVariable Integer id){
+		return new ResponseEntity<>(svc.getCategory(id), HttpStatus.OK);
 	}
 
 	/**

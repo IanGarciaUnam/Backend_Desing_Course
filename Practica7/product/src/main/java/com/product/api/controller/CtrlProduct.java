@@ -22,14 +22,18 @@ import java.util.Collections;
 import com.product.api.dto.ApiResponse;
 import com.product.api.entity.Product;
 import com.product.api.service.SvcProduct;
+import com.product.api.service.SVCCategory;
 import com.product.exception.ApiException;
 import com.product.api.dto.DTOCategory;
+import com.product.api.dto.DTOProductCategory;
 @RestController
 @RequestMapping("/product")
 public class CtrlProduct {
 
 	@Autowired
 	SvcProduct svc;
+	@Autowired
+	SVCCategory svcCategory;
 
 	// 1. Implementar método getProduct
 
@@ -52,10 +56,16 @@ public class CtrlProduct {
 		return new ResponseEntity<>(svc.getProduct(gtin), HttpStatus.OK);
 	}
 
+	@GetMapping("category/{id}")
+	@ResponseBody
+	public ResponseEntity<List<DTOProductCategory>> getListProducts(@PathVariable Integer id){
+		return new ResponseEntity<>(svcCategory.getListProducts(id), HttpStatus.OK);
+	}
+
 	@PostMapping
 	public ResponseEntity<ApiResponse> createProduct(@Valid @RequestBody Product in, BindingResult bindingResult){
-		//if(bindingResult.hasErrors())
-			//throw new ApiException(HttpStatus.BAD_REQUEST, bindingResult.getAllErrors().get(0).getDefaultMessage());
+		if(bindingResult.hasErrors())
+			throw new ApiException(HttpStatus.BAD_REQUEST, bindingResult.getAllErrors().get(0).getDefaultMessage());
 		return new ResponseEntity<>(svc.createProduct(in),HttpStatus.OK);
 	}
 

@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import java.sql.SQLIntegrityConstraintViolationException;
 import com.product.api.dto.ApiResponse;
 import com.product.api.entity.Product;
+import com.product.api.entity.Category;
 import com.product.api.repository.RepoCategory;
 import com.product.api.repository.RepoProduct;
 import com.product.exception.ApiException;
@@ -25,11 +26,14 @@ public class SvcProductImp implements SvcProduct {
 	public Product getProduct(String gtin) {
 		Product product = repo.findByGTIN(gtin); // sustituir null por la llamada al método implementado en el repositorio
 		if (product != null) {
+			Category c=(Category) repoCategory.findByCategoryId(product.getCategory_id());
+			if(c==null)
+				throw new ApiException(HttpStatus.NOT_FOUND, "category non active");
 			product.setCategory(repoCategory.getCategory(product.getCategory_id()));
 			return product;
 		}else
 			throw new ApiException(HttpStatus.NOT_FOUND, "product does not exist");
-	}
+		}
 
 	/*
 	 * 4. Implementar el método createProduct considerando las siguientes validaciones:
@@ -42,6 +46,9 @@ public class SvcProductImp implements SvcProduct {
 	public ApiResponse createProduct(Product in) {
 		in.setStatus(1);
 		try{
+			if(repoCategory.findByCategoryId(in.getCategory_id())==null){
+				throw new ApiException(HttpStatus.NOT_FOUND, "category not found");
+			}
 			repo.save(in);
 		}catch(DataIntegrityViolationException e){
 			Product pr =(Product) repo.findByGTINnotStatusMarked(in.getGtin());
@@ -53,8 +60,10 @@ public class SvcProductImp implements SvcProduct {
 				return new ApiResponse("product activated");
 			}else if(e.getLocalizedMessage().contains("product") && (pr==null || pr.getStatus()==1)){
 				throw new ApiException(HttpStatus.BAD_REQUEST, "product name already exists");
+			}else if(repoCategory.findByCategoryId(in.getCategory_id())==null){
+				throw new ApiException(HttpStatus.NOT_FOUND, "category not found");
 			}else if (e.contains(SQLIntegrityConstraintViolationException.class))
-						throw new ApiException(HttpStatus.BAD_REQUEST, "category not found");
+						throw new ApiException(HttpStatus.NOT_FOUND, "category not found");
 		}
 		return new ApiResponse("product created");
 	}

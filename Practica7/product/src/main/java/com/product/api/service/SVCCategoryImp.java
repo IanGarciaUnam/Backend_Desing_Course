@@ -3,7 +3,6 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.LinkedList;
-
 import org.springframework.http.HttpStatus;
 import com.product.api.entity.Category;
 import com.product.api.entity.Product;
@@ -39,11 +38,12 @@ public class SVCCategoryImp implements SVCCategory {
 
     @Override
     public ApiResponse createCategory(Category category){
-      Category cat=(Category) categoryRepository.findByCategory(category.getCategory());
-      if(cat !=null){
-        if(cat.getStatus()==0){
-          categoryRepository.activateCategory(cat.getCategory_id());
-          return new ApiResponse( "category has been activated");
+      Category cat2=(Category) categoryRepository.findByCategory(category.getCategory());
+      if(cat2 !=null){
+        if(cat2.getStatus()==0){
+            categoryRepository.activateCategory(cat2.getCategory_id());
+            categoryRepository.updateCategory(cat2.getCategory_id(),cat2.getCategory());
+            return new ApiResponse( "category has been activated");
         }else{
           throw new ApiException(HttpStatus.BAD_REQUEST,"category already exists");
         }
@@ -85,6 +85,10 @@ public class SVCCategoryImp implements SVCCategory {
 
     @Override
     public List<DTOProductCategory> getListProducts(Integer id){
+      Category c=(Category) categoryRepository.findByCategoryId(id);
+      if(c==null)
+        throw new ApiException(HttpStatus.NOT_FOUND,"category does not exists");
+
       List<Product> products= productRepository.getListProducts(id);
       List<DTOProductCategory> dtoProductCategory= new LinkedList<>();
       for(Product p: products){
