@@ -1,7 +1,6 @@
 package com.product.api.controller;
 
 import javax.validation.Valid;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -86,7 +85,7 @@ public class CtrlProduct {
 	}
 
 	@PutMapping("/{gtin}/category")
-	public ResponseEntity<ApiResponse> updateProductCategory(@PathVariable("gtin") String gtin, @Valid @RequestBody DTOCategory dtoCategory){
+	public ResponseEntity<ApiResponse> updateProductCategory(@PathVariable("gtin") String gtin,  @RequestBody(required = true) @Valid DTOCategory dtoCategory, BindingResult bindingResult){
 		System.out.println("hola uwu");
 		//if(bindingResult.hasErrors())
 			//throw new ApiException(HttpStatus.BAD_REQUEST, bindingResult.getAllErrors().get(0).getDefaultMessage());
