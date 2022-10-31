@@ -54,13 +54,14 @@ public class SVCCategoryImp implements SVCCategory {
 
     @Override
     public ApiResponse updateCategory(Integer id, Category category){
-      Category cat=(Category)categoryRepository.findByCategoryId(id);
+      Category cat=(Category)categoryRepository. findByCategoryIdNotStatusMarked(id);
       if(cat==null){
         throw new ApiException(HttpStatus.NOT_FOUND, "category does not exists");
       } else if(cat.getStatus()==0){
-        categoryRepository.activateCategory(cat.getCategory_id());
-        categoryRepository.updateCategory(id, category.getCategory());
-        return new ApiResponse( "category has been activated");
+        throw new ApiException(HttpStatus.NOT_FOUND, "category is not active");
+        //categoryRepository.activateCategory(cat.getCategory_id());
+        //categoryRepository.updateCategory(id, category.getCategory());
+        //return new ApiResponse( "category has been activated");
       }
 
        Category ext=(Category)categoryRepository.findByCategory(category.getCategory());

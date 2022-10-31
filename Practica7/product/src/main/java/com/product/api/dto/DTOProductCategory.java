@@ -6,13 +6,17 @@ public class DTOProductCategory{
     private String gtin;
     private String product;
     private Double price;
-    
+
     public DTOProductCategory(Integer product_id, String gtin, String product, Double price){
       this.product_id=product_id;
       this.gtin=gtin;
       this.product=product;
       this.price=price;
 
+    }
+
+    public DTOProductCategory(){
+      super();
     }
 
     public Integer getProduct_id(){
